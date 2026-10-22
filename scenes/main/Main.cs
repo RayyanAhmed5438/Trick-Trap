@@ -16,6 +16,45 @@ public partial class Main : Node
     private RoomRoot? _currentRoom;
     private bool _transitionInProgress;
 
+    public override void _UnhandledInput(InputEvent @event)
+    {
+        if (@event is not InputEventKey keyEvent ||
+            !keyEvent.Pressed ||
+            keyEvent.Echo ||
+            keyEvent.Keycode != Key.F11)
+        {
+            return;
+        }
+
+        ToggleFullscreen();
+        GetViewport().SetInputAsHandled();
+    }
+
+
+    private void ToggleFullscreen()
+    {
+        Window window = GetWindow();
+
+        if (window.Mode == Window.ModeEnum.Windowed)
+        {
+            window.Mode = Window.ModeEnum.Fullscreen;
+            return;
+        }
+
+        // Always return to the same fixed-size window.
+        window.Mode = Window.ModeEnum.Windowed;
+        window.Size = new Vector2I(1280, 720);
+        window.MinSize = new Vector2I(1280, 720);
+        window.MaxSize = new Vector2I(1280, 720);
+        window.Unresizable = true;
+
+        int screen = window.CurrentScreen;
+        Vector2I screenPosition = DisplayServer.ScreenGetPosition(screen);
+        Vector2I screenSize = DisplayServer.ScreenGetSize(screen);
+        window.Position = screenPosition + (screenSize - window.Size) / 2;
+    }
+
+
     public override void _Ready()
     {
         _roomHost = GetNode<Node2D>("RoomHost");
