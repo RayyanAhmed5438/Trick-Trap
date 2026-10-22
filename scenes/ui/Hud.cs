@@ -69,7 +69,16 @@ public partial class Hud : CanvasLayer
                     mouseEvent.Pressed &&
                     mouseEvent.ButtonIndex == MouseButton.Left)
                 {
-                    _gameState.SelectInventorySlot(slotIndex);
+                    if (_activeDrawer != null && _drawerInventoryPanel.Visible)
+                    {
+                        if (_activeDrawer.TryStorePlayerItemAt(slotIndex))
+                            RefreshDrawerInventory();
+                    }
+                    else
+                    {
+                        _gameState.SelectInventorySlot(slotIndex);
+                    }
+
                     slot.AcceptEvent();
                 }
             };
@@ -87,21 +96,31 @@ public partial class Hud : CanvasLayer
             Visible = false,
             MouseFilter = Control.MouseFilterEnum.Stop
         };
-        _drawerInventoryPanel.AddThemeStyleboxOverride("panel", new StyleBoxEmpty());
+
+        // A solid black box with a brown pixel-style frame.
+        var frameStyle = new StyleBoxFlat
+        {
+            BgColor = Colors.Black,
+            BorderColor = new Color(0.42f, 0.27f, 0.15f)
+        };
+        frameStyle.SetBorderWidthAll(2);
+        frameStyle.SetContentMarginAll(5);
+        _drawerInventoryPanel.AddThemeStyleboxOverride("panel", frameStyle);
 
         _drawerInventoryPanel.AnchorLeft = 0.5f;
         _drawerInventoryPanel.AnchorRight = 0.5f;
         _drawerInventoryPanel.AnchorTop = 1.0f;
         _drawerInventoryPanel.AnchorBottom = 1.0f;
-        _drawerInventoryPanel.OffsetTop = -142.0f;
-        _drawerInventoryPanel.OffsetBottom = -86.0f;
+        // The framed drawer inventory sits just above the player's existing bar.
+        _drawerInventoryPanel.OffsetTop = -154.0f;
+        _drawerInventoryPanel.OffsetBottom = -82.0f;
 
         _drawerInventorySlots = new HBoxContainer
         {
             Name = "Slots",
             MouseFilter = Control.MouseFilterEnum.Ignore
         };
-        _drawerInventorySlots.AddThemeConstantOverride("separation", 27);
+        _drawerInventorySlots.AddThemeConstantOverride("separation", 0);
         _drawerInventoryPanel.AddChild(_drawerInventorySlots);
         AddChild(_drawerInventoryPanel);
 
@@ -134,9 +153,12 @@ public partial class Hud : CanvasLayer
                 MouseFilter = Control.MouseFilterEnum.Stop
             };
 
-            StyleBox sourceStyle = _inventorySlots[0].GetThemeStylebox("panel");
-            if (sourceStyle.Duplicate() is StyleBox copiedStyle)
-                slot.AddThemeStyleboxOverride("panel", copiedStyle);
+            // Keep the slot interior black and free from extra outlines.
+            var slotStyle = new StyleBoxFlat
+            {
+                BgColor = Colors.Black
+            };
+            slot.AddThemeStyleboxOverride("panel", slotStyle);
 
             var center = new CenterContainer
             {
@@ -149,7 +171,8 @@ public partial class Hud : CanvasLayer
                 CustomMinimumSize = new Vector2(40, 40),
                 Visible = false,
                 MouseFilter = Control.MouseFilterEnum.Ignore,
-                StretchMode = TextureRect.StretchModeEnum.KeepAspectCentered
+                StretchMode = TextureRect.StretchModeEnum.KeepAspectCentered,
+                TextureFilter = CanvasItem.TextureFilterEnum.Nearest
             };
 
             center.AddChild(icon);
@@ -161,9 +184,23 @@ public partial class Hud : CanvasLayer
 
             _drawerSlots.Add(slot);
             _drawerIcons.Add(icon);
+
+            if (i < capacity - 1)
+            {
+                // Thin grey dividers distinguish adjacent inventory slots.
+                var separator = new ColorRect
+                {
+                    Name = $"Separator{i + 1}",
+                    Color = new Color(0.42f, 0.42f, 0.42f),
+                    CustomMinimumSize = new Vector2(1, 56),
+                    MouseFilter = Control.MouseFilterEnum.Ignore
+                };
+                _drawerInventorySlots.AddChild(separator);
+            }
         }
 
-        float totalWidth = capacity * 56.0f + (capacity - 1) * 27.0f;
+        float contentWidth = capacity * 56.0f + (capacity - 1) * 1.0f;
+        float totalWidth = contentWidth + 20.0f;
         _drawerInventoryPanel.OffsetLeft = -totalWidth / 2.0f;
         _drawerInventoryPanel.OffsetRight = totalWidth / 2.0f;
     }
