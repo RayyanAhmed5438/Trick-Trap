@@ -5,8 +5,8 @@ uniform float outline_width = 1.0;
 uniform bool outline_enabled = false;
 
 void fragment() {
-    vec4 vertex_color = COLOR;
-    vec4 base_color = texture(TEXTURE, UV) * vertex_color;
+    // COLOR already contains the sampled texture multiplied by vertex/modulate color.
+    vec4 base_color = COLOR;
 
     if (!outline_enabled) {
         COLOR = base_color;
@@ -29,7 +29,7 @@ void fragment() {
         neighbor_alpha = max(neighbor_alpha, texture(TEXTURE, UV + vec2(-step_uv.x, -step_uv.y)).a);
 
         if (neighbor_alpha > 0.05) {
-            COLOR = outline_color * vertex_color;
+            COLOR = outline_color;
         } else {
             COLOR = vec4(0.0);
         }
