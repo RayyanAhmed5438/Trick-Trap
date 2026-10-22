@@ -1,0 +1,12 @@
+[gd_scene format=3 uid="uid://vjob0rgj7cpa"]
+
+[ext_resource type="Script" uid="uid://b8oks683l5o6" path="res://scenes/interactables/exit/RoomExit.cs" id="1_6adkh"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_s7wsd"]
+radius = 20.0
+
+[node name="RoomExit" type="Area2D" unique_id=748553445]
+script = ExtResource("1_6adkh")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=493140707]
+shape = SubResource("CircleShape2D_s7wsd")

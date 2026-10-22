@@ -1,0 +1,16 @@
+[gd_scene format=3 uid="uid://bkwhixrubllo3"]
+
+[ext_resource type="Script" uid="uid://r1wehmf18hp6" path="res://resources/items/ItemPickup.cs" id="1_p2t2k"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_s7wsd"]
+radius = 6.0
+
+[node name="ItemPickup" type="Area2D" unique_id=1739393689]
+script = ExtResource("1_p2t2k")
+
+[node name="Visual" type="Sprite2D" parent="." unique_id=294606741]
+texture_filter = 1
+position = Vector2(0, -8)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1293265337]
+shape = SubResource("CircleShape2D_s7wsd")

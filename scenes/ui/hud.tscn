@@ -1,0 +1,108 @@
+[gd_scene format=3 uid="uid://b7rb63cd70rcv"]
+
+[ext_resource type="FontFile" uid="uid://icajb1vv2gr1" path="res://assets/fonts/PixelOperator8-Bold.ttf" id="1_0mwgc"]
+[ext_resource type="Script" uid="uid://dd6yunct43cmj" path="res://scenes/ui/Hud.cs" id="1_hqnrr"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_bo48s"]
+bg_color = Color(0.6, 0.23921569, 0.6, 0)
+
+[node name="HUD" type="CanvasLayer" unique_id=853645327]
+script = ExtResource("1_hqnrr")
+
+[node name="CandyCounter" type="Label" parent="." unique_id=1288143713]
+texture_filter = 1
+offset_left = 16.0
+offset_top = 16.0
+offset_right = 176.0
+offset_bottom = 48.0
+theme_override_fonts/font = ExtResource("1_0mwgc")
+text = "Candies: 0"
+vertical_alignment = 1
+
+[node name="InventoryBar" type="PanelContainer" parent="." unique_id=490471622]
+anchors_preset = -1
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -160.0
+offset_top = -76.0
+offset_right = 136.0
+offset_bottom = -20.0
+grow_horizontal = 2
+grow_vertical = 0
+theme_override_styles/panel = SubResource("StyleBoxFlat_bo48s")
+
+[node name="Slots" type="HBoxContainer" parent="InventoryBar" unique_id=284510637]
+layout_mode = 2
+theme_override_constants/separation = 27
+
+[node name="Slot1" type="PanelContainer" parent="InventoryBar/Slots" unique_id=1290373174]
+custom_minimum_size = Vector2(56, 56)
+layout_mode = 2
+
+[node name="CenterContainer" type="CenterContainer" parent="InventoryBar/Slots/Slot1" unique_id=656535875]
+layout_mode = 2
+
+[node name="Icon" type="TextureRect" parent="InventoryBar/Slots/Slot1/CenterContainer" unique_id=1852775650]
+visible = false
+texture_filter = 1
+custom_minimum_size = Vector2(40, 40)
+layout_mode = 2
+stretch_mode = 5
+
+[node name="Slot2" type="PanelContainer" parent="InventoryBar/Slots" unique_id=954455038]
+custom_minimum_size = Vector2(56, 56)
+layout_mode = 2
+
+[node name="CenterContainer" type="CenterContainer" parent="InventoryBar/Slots/Slot2" unique_id=1179554331]
+layout_mode = 2
+
+[node name="Icon" type="TextureRect" parent="InventoryBar/Slots/Slot2/CenterContainer" unique_id=1294691051]
+visible = false
+texture_filter = 1
+custom_minimum_size = Vector2(40, 40)
+layout_mode = 2
+stretch_mode = 5
+
+[node name="Slot3" type="PanelContainer" parent="InventoryBar/Slots" unique_id=46135408]
+custom_minimum_size = Vector2(56, 56)
+layout_mode = 2
+
+[node name="CenterContainer" type="CenterContainer" parent="InventoryBar/Slots/Slot3" unique_id=1833042509]
+layout_mode = 2
+
+[node name="Icon" type="TextureRect" parent="InventoryBar/Slots/Slot3/CenterContainer" unique_id=371361708]
+visible = false
+texture_filter = 1
+custom_minimum_size = Vector2(40, 40)
+layout_mode = 2
+stretch_mode = 5
+
+[node name="Slot4" type="PanelContainer" parent="InventoryBar/Slots" unique_id=6740868]
+custom_minimum_size = Vector2(56, 56)
+layout_mode = 2
+
+[node name="CenterContainer" type="CenterContainer" parent="InventoryBar/Slots/Slot4" unique_id=931827060]
+layout_mode = 2
+
+[node name="Icon" type="TextureRect" parent="InventoryBar/Slots/Slot4/CenterContainer" unique_id=1606381003]
+visible = false
+texture_filter = 1
+custom_minimum_size = Vector2(40, 40)
+layout_mode = 2
+stretch_mode = 5
+
+[node name="Slot5" type="PanelContainer" parent="InventoryBar/Slots" unique_id=1784487782]
+custom_minimum_size = Vector2(56, 56)
+layout_mode = 2
+
+[node name="CenterContainer" type="CenterContainer" parent="InventoryBar/Slots/Slot5" unique_id=1845432572]
+layout_mode = 2
+
+[node name="Icon" type="TextureRect" parent="InventoryBar/Slots/Slot5/CenterContainer" unique_id=1078635139]
+visible = false
+texture_filter = 1
+custom_minimum_size = Vector2(40, 40)
+layout_mode = 2
+stretch_mode = 5

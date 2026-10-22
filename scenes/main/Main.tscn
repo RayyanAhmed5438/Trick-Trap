@@ -1,0 +1,13 @@
+[gd_scene format=3 uid="uid://mfkg1anxh2cq"]
+
+[ext_resource type="Script" uid="uid://icrbm6ii3wx8" path="res://scenes/main/Main.cs" id="1_nha0i"]
+[ext_resource type="PackedScene" uid="uid://07cag2f1mwe" path="res://scenes/rooms/levels/level_1.tscn" id="2_gyg6b"]
+[ext_resource type="PackedScene" uid="uid://b7rb63cd70rcv" path="res://scenes/ui/hud.tscn" id="2_q24mn"]
+
+[node name="Main" type="Node" unique_id=1702311292]
+script = ExtResource("1_nha0i")
+StartingRoom = ExtResource("2_gyg6b")
+
+[node name="RoomHost" type="Node2D" parent="." unique_id=848355775]
+
+[node name="HUD" parent="." unique_id=853645327 instance=ExtResource("2_q24mn")]

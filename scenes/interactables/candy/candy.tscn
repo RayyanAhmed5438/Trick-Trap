@@ -1,0 +1,19 @@
+[gd_scene format=3 uid="uid://cxnhqo0fepiqg"]
+
+[ext_resource type="Script" uid="uid://c287q7uolyglj" path="res://scenes/interactables/candy/Candy.cs" id="1_7iprb"]
+[ext_resource type="Texture2D" uid="uid://v2p2vwb38igs" path="res://icon.svg" id="1_dvdv4"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_s7wsd"]
+radius = 5.0
+
+[node name="Candy" type="Area2D" unique_id=1096478002]
+script = ExtResource("1_7iprb")
+
+[node name="Visual" type="Sprite2D" parent="." unique_id=437808239]
+position = Vector2(0, -8)
+scale = Vector2(0.125, 0.125)
+texture = ExtResource("1_dvdv4")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1446353586]
+position = Vector2(0, -8)
+shape = SubResource("CircleShape2D_s7wsd")

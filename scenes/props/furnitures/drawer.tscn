@@ -1,0 +1,41 @@
+[gd_scene format=3 uid="uid://cqurkmcn3susa"]
+
+[ext_resource type="Script" uid="uid://bhtvdiegkbacx" path="res://scenes/props/furnitures/Drawer.cs" id="1_86xxx"]
+[ext_resource type="Texture2D" uid="uid://druq6gsuq0y05" path="res://scenes/props/furnitures/drawer.png" id="2_qomat"]
+[ext_resource type="FontFile" uid="uid://icajb1vv2gr1" path="res://assets/fonts/PixelOperator8-Bold.ttf" id="3_qomat"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_s7wsd"]
+size = Vector2(24, 16)
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_s7rlf"]
+radius = 24.0
+
+[node name="Drawer" type="StaticBody2D" unique_id=1609275193]
+script = ExtResource("1_86xxx")
+
+[node name="Visual" type="Sprite2D" parent="." unique_id=206687992]
+position = Vector2(0, -16)
+scale = Vector2(0.015, 0.015)
+texture = ExtResource("2_qomat")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=23595577]
+position = Vector2(0, -8)
+shape = SubResource("RectangleShape2D_s7wsd")
+
+[node name="InteractionArea" type="Area2D" parent="." unique_id=126254096]
+position = Vector2(0, -8)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="InteractionArea" unique_id=774318266]
+shape = SubResource("CircleShape2D_s7rlf")
+
+[node name="InteractionPrompt" type="Label" parent="." unique_id=649898319]
+texture_filter = 1
+offset_left = -38.0
+offset_top = -58.0
+offset_right = 60.0
+offset_bottom = -35.0
+theme_override_fonts/font = ExtResource("3_qomat")
+theme_override_font_sizes/font_size = 15
+text = "Press E"
+horizontal_alignment = 1
+vertical_alignment = 1
