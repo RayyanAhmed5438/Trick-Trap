@@ -112,6 +112,43 @@ public partial class GameState : Node
         );
     }
 
+    public bool TryRemoveItemAt(
+        int slotIndex,
+        out InventoryItemData? removedItem)
+    {
+        removedItem = null;
+
+        if (slotIndex < 0 || slotIndex >= _inventoryItems.Count)
+            return false;
+
+        int previousSelection = SelectedInventoryIndex;
+        removedItem = _inventoryItems[slotIndex];
+        _inventoryItems.RemoveAt(slotIndex);
+
+        if (SelectedInventoryIndex == slotIndex)
+        {
+            SelectedInventoryIndex = -1;
+        }
+        else if (SelectedInventoryIndex > slotIndex)
+        {
+            SelectedInventoryIndex--;
+        }
+
+        GD.Print($"Removed from inventory: {removedItem.DisplayName}");
+        EmitSignal(SignalName.InventoryChanged);
+
+        if (previousSelection != SelectedInventoryIndex)
+        {
+            EmitSignal(
+                SignalName.InventorySelectionChanged,
+                SelectedInventoryIndex
+            );
+        }
+
+        return true;
+    }
+
+
     public bool RemoveItem(string itemId)
     {
         for (int i = 0; i < _inventoryItems.Count; i++)
