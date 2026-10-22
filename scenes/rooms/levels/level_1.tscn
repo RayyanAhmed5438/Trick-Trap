@@ -60,7 +60,7 @@ position = Vector2(151, 64)
 PersistentId = "level_1_candy_03"
 
 [node name="RoomExit" parent="WorldYSort" unique_id=748553445 instance=ExtResource("7_va068")]
-position = Vector2(462, -22)
+position = Vector2(484, -24)
 DestinationRoomPath = "res://scenes/rooms/levels/level_2.tscn"
 
 [node name="Node2D" type="Node2D" parent="WorldYSort" unique_id=955614132]

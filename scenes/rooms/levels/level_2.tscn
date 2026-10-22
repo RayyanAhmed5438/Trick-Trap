@@ -59,10 +59,14 @@ Contents = Array[ExtResource("6_8sm7v")]([ExtResource("8_h70w4")])
 position = Vector2(349, -95)
 PersistentId = "Drawer2"
 
-[node name="RoomExit" parent="WorldYSort" unique_id=748553445 instance=ExtResource("7_u5457")]
+[node name="previous_level_exit" parent="WorldYSort" unique_id=748553445 instance=ExtResource("7_u5457")]
 position = Vector2(-194, 3)
 DestinationRoomPath = "res://scenes/rooms/levels/level_1.tscn"
 ExitDirection = 1
+
+[node name="Next_level_exit" parent="WorldYSort" unique_id=1404601094 instance=ExtResource("7_u5457")]
+position = Vector2(191, 135)
+DestinationRoomPath = "uid://v6gf5ke36owg"
 
 [node name="FurniturePlaceholder" parent="WorldYSort" unique_id=497856792 instance=ExtResource("4_7uu6a")]
 position = Vector2(186, 69)
