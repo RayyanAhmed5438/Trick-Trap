@@ -12,7 +12,7 @@ public partial class InteractableOutline : Node
     public Color OutlineColor { get; set; } = Colors.White;
 
     [Export(PropertyHint.Range, "1,4,0.5")]
-    public float OutlineWidth { get; set; } = 1.0f;
+    public float OutlineWidth { get; set; } = 2.0f;
 
     private Area2D? _interactionArea;
     private CanvasItem? _visual;
@@ -47,7 +47,7 @@ public partial class InteractableOutline : Node
             Shader = outlineShader
         };
         _outlineMaterial.SetShaderParameter("outline_color", OutlineColor);
-        _outlineMaterial.SetShaderParameter("outline_width", OutlineWidth);
+        _outlineMaterial.SetShaderParameter("outline_width", GetTexturePixelWidth());
         _outlineMaterial.SetShaderParameter("outline_enabled", false);
 
         _visual.Material = _outlineMaterial;
@@ -68,8 +68,30 @@ public partial class InteractableOutline : Node
             SetOutlineVisible(false);
     }
 
+    private float GetTexturePixelWidth()
+    {
+        // OutlineWidth is measured in screen pixels. Convert it into texture
+        // pixels so an outline stays visible even on a sprite scaled down
+        // heavily (such as the current drawer artwork).
+        float visualScale = _visual is Node2D visualNode
+            ? visualNode.GlobalTransform.X.Length()
+            : 1.0f;
+
+        float cameraZoom = GetViewport().GetCamera2D()?.Zoom.X ?? 1.0f;
+        float screenPixelsPerTexturePixel = visualScale * cameraZoom;
+
+        return Mathf.Max(
+            1.0f,
+            OutlineWidth / Mathf.Max(screenPixelsPerTexturePixel, 0.001f)
+        );
+    }
+
     private void SetOutlineVisible(bool visible)
     {
-        _outlineMaterial?.SetShaderParameter("outline_enabled", visible);
+        if (_outlineMaterial == null)
+            return;
+
+        _outlineMaterial.SetShaderParameter("outline_width", GetTexturePixelWidth());
+        _outlineMaterial.SetShaderParameter("outline_enabled", visible);
     }
 }
