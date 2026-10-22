@@ -9,7 +9,6 @@
 [ext_resource type="PackedScene" uid="uid://bkwhixrubllo3" path="res://resources/items/item_pickup.tscn" id="7_57wra"]
 [ext_resource type="PackedScene" uid="uid://vjob0rgj7cpa" path="res://scenes/interactables/exit/room_exit.tscn" id="7_va068"]
 [ext_resource type="Resource" uid="uid://cnnjgisaq7m7p" path="res://resources/items/rusty_key.tres" id="8_f0iwe"]
-[ext_resource type="PackedScene" uid="uid://4ismpi76h25e" path="res://scenes/rooms/levels/level_2.tscn" id="8_poqwc"]
 
 [node name="RoomRoot" type="Node2D" unique_id=1985003105]
 script = ExtResource("1_hf6la")
@@ -57,7 +56,8 @@ position = Vector2(151, 64)
 
 [node name="RoomExit" parent="WorldYSort" unique_id=748553445 instance=ExtResource("7_va068")]
 position = Vector2(462, -22)
-DestinationRoom = ExtResource("8_poqwc")
+DestinationRoomPath = "res://scenes/rooms/levels/level_2.tscn"
+ExitDirection = 0
 
 [node name="Node2D" type="Node2D" parent="WorldYSort" unique_id=955614132]
 
@@ -88,7 +88,5 @@ position = Vector2(177, -75)
 
 [node name="MonsterSpawn_B" type="Marker2D" parent="SpawnPoints" unique_id=683221020]
 
-[node name="Arrival_from_level_2" type="Marker2D" parent="SpawnPoints" unique_id=943812105]
-position = Vector2(438, -22)
 
 [node name="Camera2D" type="Camera2D" parent="." unique_id=1619336848]
