@@ -2,16 +2,26 @@ using Godot;
 
 public partial class RoomExit : Area2D
 {
+    public enum ExitDirectionType
+    {
+        NextLevel,
+        PreviousLevel,
+        Custom
+    }
+
     [Export(PropertyHint.File, "*.tscn")]
     public string DestinationRoomPath { get; set; } = "";
 
     [Export]
-    public string DestinationSpawnId { get; set; } = "PlayerSpawn";
+    public ExitDirectionType ExitDirection { get; set; } = ExitDirectionType.NextLevel;
 
+    // Leave empty to use the normal spawn rule for this exit direction.
+    // Set a marker name only for a custom arrival location.
+    [Export]
+    public string DestinationSpawnId { get; set; } = "";
 
-    private bool _playerInRange = false;
-    private bool _transitionPending = false;
-
+    private bool _playerInRange;
+    private bool _transitionPending;
 
     public override void _Ready()
     {
@@ -19,17 +29,14 @@ public partial class RoomExit : Area2D
         BodyExited += OnBodyExited;
     }
 
-
     private void OnBodyEntered(Node2D body)
     {
         if (!body.IsInGroup("player"))
             return;
 
         _playerInRange = true;
-
         GD.Print("Press E to use the exit.");
     }
-
 
     private void OnBodyExited(Node2D body)
     {
@@ -38,7 +45,6 @@ public partial class RoomExit : Area2D
 
         _playerInRange = false;
     }
-
 
     public override void _UnhandledInput(InputEvent @event)
     {
@@ -49,24 +55,17 @@ public partial class RoomExit : Area2D
             return;
 
         GetViewport().SetInputAsHandled();
-
         _transitionPending = true;
-
-        // Defer the transition until input processing finishes.
         CallDeferred(nameof(PerformTransition));
     }
-
 
     private void PerformTransition()
     {
         if (string.IsNullOrWhiteSpace(DestinationRoomPath) ||
             !ResourceLoader.Exists(DestinationRoomPath))
         {
-            GD.PushWarning(
-                $"{Name}: Destination room path is empty or invalid: " +
-                $"'{DestinationRoomPath}'."
-            );
-
+            GD.PushWarning(Name + ": Destination room path is empty or invalid: '" +
+                DestinationRoomPath + "'.");
             _transitionPending = false;
             return;
         }
@@ -76,29 +75,19 @@ public partial class RoomExit : Area2D
 
         if (destinationRoom == null)
         {
-            GD.PushWarning(
-                $"{Name}: Failed to load room: {DestinationRoomPath}"
-            );
-
+            GD.PushWarning(Name + ": Failed to load room: " + DestinationRoomPath);
             _transitionPending = false;
             return;
         }
 
         Main? main = GetNodeOrNull<Main>("/root/Main");
-
         if (main == null)
         {
-            GD.PushError(
-                "RoomExit: Could not find Main at /root/Main."
-            );
-
+            GD.PushError("RoomExit: Could not find Main at /root/Main.");
             _transitionPending = false;
             return;
         }
 
-        main.TransitionTo(
-            destinationRoom,
-            DestinationSpawnId
-        );
+        main.TransitionTo(destinationRoom, ExitDirection, DestinationSpawnId);
     }
 }
