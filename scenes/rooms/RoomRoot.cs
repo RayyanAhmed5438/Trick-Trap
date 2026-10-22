@@ -39,6 +39,10 @@ public partial class RoomRoot : Node2D
             "Camera2D"
         );
 
+        // Give every stateful object a stable ID before restoring its saved state.
+        // IDs are based on the node's room-relative scene path when missing or duplicated.
+        EnsurePersistentIds(this);
+
         // Restore saved object states before gameplay continues.
         RestorePersistentState();
 
@@ -273,6 +277,9 @@ public partial class RoomRoot : Node2D
             return;
         }
 
+        // Also cover any stateful nodes added to the room after it first entered the tree.
+        EnsurePersistentIds(this);
+
         var objectStates =
             new Dictionary<
                 string,
@@ -289,6 +296,65 @@ public partial class RoomRoot : Node2D
     }
 
 
+    private void EnsurePersistentIds(Node parent)
+    {
+        var usedIds = new HashSet<string>();
+        AssignPersistentIds(parent, usedIds);
+    }
+
+
+    private void AssignPersistentIds(Node parent, HashSet<string> usedIds)
+    {
+        if (parent is IRoomStateful stateful)
+        {
+            string id = stateful.PersistentId?.Trim() ?? "";
+
+            if (string.IsNullOrWhiteSpace(id) || usedIds.Contains(id))
+            {
+                bool wasDuplicate = !string.IsNullOrWhiteSpace(id);
+                string originalId = id;
+                id = GeneratePersistentId(parent, usedIds);
+                stateful.PersistentId = id;
+
+                if (wasDuplicate)
+                {
+                    GD.Print(
+                        $"RoomRoot: Duplicate PersistentId '{originalId}' on " +
+                        $"{parent.GetPath()}; automatically generated '{id}'."
+                    );
+                }
+            }
+
+            usedIds.Add(id);
+        }
+
+        // Search nested containers as well as direct children.
+        foreach (Node child in parent.GetChildren())
+        {
+            AssignPersistentIds(child, usedIds);
+        }
+    }
+
+
+    private string GeneratePersistentId(Node node, HashSet<string> usedIds)
+    {
+        // Use the path relative to this room, not a random value, so a new
+        // instance of the same room produces the same ID when revisited.
+        string path = GetPathTo(node).ToString();
+        string baseId = $"auto:{path}";
+        string candidate = baseId;
+        int suffix = 2;
+
+        while (string.IsNullOrWhiteSpace(candidate) || usedIds.Contains(candidate))
+        {
+            candidate = $"{baseId}#{suffix}";
+            suffix++;
+        }
+
+        return candidate;
+    }
+
+
     private void CollectPersistentStates(
         Node parent,
         Dictionary<
@@ -298,28 +364,10 @@ public partial class RoomRoot : Node2D
     {
         if (parent is IRoomStateful stateful)
         {
-            string id = stateful.PersistentId;
-
-            if (string.IsNullOrWhiteSpace(id))
-            {
-                GD.PushWarning(
-                    $"{parent.GetPath()} implements IRoomStateful " +
-                    "but has no PersistentId."
-                );
-            }
-            else if (objectStates.ContainsKey(id))
-            {
-                GD.PushWarning(
-                    $"Duplicate PersistentId '{id}' in room '{RoomId}'."
-                );
-            }
-            else
-            {
-                objectStates[id] = stateful.CapturePersistentState();
-            }
+            // EnsurePersistentIds has already assigned a unique ID.
+            objectStates[stateful.PersistentId] = stateful.CapturePersistentState();
         }
 
-        // Search nested containers as well as direct children.
         foreach (Node child in parent.GetChildren())
         {
             CollectPersistentStates(child, objectStates);
