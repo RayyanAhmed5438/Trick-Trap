@@ -113,6 +113,31 @@ public partial class Drawer : StaticBody2D, IRoomStateful
         return true;
     }
 
+
+    public bool TryStorePlayerItemAt(int playerSlotIndex)
+    {
+        if (Contents.Count >= InventoryCapacity)
+        {
+            GD.Print($"{Name}: Drawer inventory is full.");
+            return false;
+        }
+
+        GameState gameState = GetNode<GameState>("/root/GameState");
+
+        // Remove the exact clicked slot, preserving correct behavior when
+        // the player's inventory contains multiple copies of the same item.
+        if (!gameState.TryRemoveItemAt(
+                playerSlotIndex,
+                out InventoryItemData? item) ||
+            item == null)
+        {
+            return false;
+        }
+
+        Contents.Add(item);
+        return true;
+    }
+
     public Godot.Collections.Dictionary<string, Variant> CapturePersistentState()
     {
         var state = new Godot.Collections.Dictionary<string, Variant>();
