@@ -16,12 +16,13 @@ public partial class Main : Node
     private RoomRoot? _currentRoom;
     private bool _transitionInProgress;
 
-    public override void _UnhandledInput(InputEvent @event)
+    public override void _Input(InputEvent @event)
     {
         if (@event is not InputEventKey keyEvent ||
             !keyEvent.Pressed ||
             keyEvent.Echo ||
-            keyEvent.Keycode != Key.F11)
+            (keyEvent.Keycode != Key.F11 &&
+             keyEvent.PhysicalKeycode != Key.F11))
         {
             return;
         }
