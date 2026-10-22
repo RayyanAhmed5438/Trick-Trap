@@ -26,7 +26,7 @@ tile_set = ExtResource("2_8i3q1")
 
 [node name="VoidBlockers" type="TileMapLayer" parent="." unique_id=2061916575]
 modulate = Color(1, 1, 1, 0)
-tile_map_data = PackedByteArray("AAALAAcAAAAAAAIAAAAMAAcAAAAAAAIAAAA=")
+tile_map_data = PackedByteArray("AAALAAcAAAAAAAIAAAAMAAcAAAAAAAIAAADy////AAAAAAIAAADy/wAAAAAAAAIAAAA=")
 tile_set = ExtResource("2_8i3q1")
 
 [node name="WorldYSort" type="Node2D" parent="." unique_id=793591220]
