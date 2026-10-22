@@ -6,6 +6,7 @@
 [ext_resource type="PackedScene" uid="uid://bllywak67mftj" path="res://scenes/props/furnitures/furniture_placeholder.tscn" id="4_uubho"]
 [ext_resource type="PackedScene" uid="uid://cqurkmcn3susa" path="res://scenes/props/furnitures/drawer.tscn" id="5_s527c"]
 [ext_resource type="PackedScene" uid="uid://cxnhqo0fepiqg" path="res://scenes/interactables/candy/candy.tscn" id="6_j4i02"]
+[ext_resource type="Script" uid="uid://co86hke6y0cc7" path="res://scripts/inventory/InventoryItemData.cs" id="6_poqwc"]
 [ext_resource type="PackedScene" uid="uid://bkwhixrubllo3" path="res://resources/items/item_pickup.tscn" id="7_57wra"]
 [ext_resource type="PackedScene" uid="uid://vjob0rgj7cpa" path="res://scenes/interactables/exit/room_exit.tscn" id="7_va068"]
 [ext_resource type="Resource" uid="uid://cnnjgisaq7m7p" path="res://resources/items/rusty_key.tres" id="8_f0iwe"]
@@ -42,6 +43,7 @@ position = Vector2(-96, -16)
 [node name="Drawer" parent="WorldYSort" unique_id=1609275193 instance=ExtResource("5_s527c")]
 position = Vector2(-32, -65)
 ContentsMessage = "You Found a key!"
+Contents = Array[ExtResource("6_poqwc")]([ExtResource("8_f0iwe"), ExtResource("8_f0iwe")])
 
 [node name="Candies" type="Node2D" parent="WorldYSort" unique_id=986815887]
 

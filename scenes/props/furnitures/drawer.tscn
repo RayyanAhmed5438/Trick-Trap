@@ -1,9 +1,9 @@
 [gd_scene format=3 uid="uid://cqurkmcn3susa"]
 
 [ext_resource type="Script" uid="uid://bhtvdiegkbacx" path="res://scenes/props/furnitures/Drawer.cs" id="1_86xxx"]
-[ext_resource type="Script" path="res://scenes/interactables/InteractableOutline.cs" id="4_outline"]
 [ext_resource type="Texture2D" uid="uid://druq6gsuq0y05" path="res://scenes/props/furnitures/drawer.png" id="2_qomat"]
 [ext_resource type="FontFile" uid="uid://icajb1vv2gr1" path="res://assets/fonts/PixelOperator8-Bold.ttf" id="3_qomat"]
+[ext_resource type="Script" uid="uid://bfia1hob0vtvg" path="res://scenes/interactables/InteractableOutline.cs" id="4_outline"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_s7wsd"]
 size = Vector2(24, 16)
@@ -12,6 +12,7 @@ size = Vector2(24, 16)
 radius = 24.0
 
 [node name="Drawer" type="StaticBody2D" unique_id=1609275193]
+texture_filter = 1
 script = ExtResource("1_86xxx")
 
 [node name="Visual" type="Sprite2D" parent="." unique_id=206687992]
@@ -41,5 +42,5 @@ text = "Press E"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="InteractionOutline" type="Node" parent="." ]
+[node name="InteractionOutline" type="Node" parent="." unique_id=281936518]
 script = ExtResource("4_outline")

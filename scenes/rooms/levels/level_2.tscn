@@ -5,8 +5,10 @@
 [ext_resource type="PackedScene" uid="uid://bedtjufgpl73" path="res://scenes/player/player.tscn" id="3_b7y7l"]
 [ext_resource type="PackedScene" uid="uid://bllywak67mftj" path="res://scenes/props/furnitures/furniture_placeholder.tscn" id="4_7uu6a"]
 [ext_resource type="PackedScene" uid="uid://cqurkmcn3susa" path="res://scenes/props/furnitures/drawer.tscn" id="5_g7vsa"]
+[ext_resource type="Script" uid="uid://co86hke6y0cc7" path="res://scripts/inventory/InventoryItemData.cs" id="6_8sm7v"]
 [ext_resource type="PackedScene" uid="uid://cxnhqo0fepiqg" path="res://scenes/interactables/candy/candy.tscn" id="6_kcd8r"]
 [ext_resource type="PackedScene" uid="uid://vjob0rgj7cpa" path="res://scenes/interactables/exit/room_exit.tscn" id="7_u5457"]
+[ext_resource type="Resource" uid="uid://cnnjgisaq7m7p" path="res://resources/items/rusty_key.tres" id="8_h70w4"]
 
 [node name="RoomRoot" type="Node2D" unique_id=1985003105]
 script = ExtResource("1_hgeg2")
@@ -51,6 +53,7 @@ PersistentId = "candy2"
 [node name="Drawer" parent="WorldYSort" unique_id=1609275193 instance=ExtResource("5_g7vsa")]
 position = Vector2(-76, -48)
 PersistentId = "Drawer1"
+Contents = Array[ExtResource("6_8sm7v")]([ExtResource("8_h70w4")])
 
 [node name="Drawer2" parent="WorldYSort" unique_id=1721466102 instance=ExtResource("5_g7vsa")]
 position = Vector2(349, -95)
