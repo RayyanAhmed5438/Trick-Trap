@@ -22,8 +22,11 @@ public partial class RoomRoot : Node2D
 
 
     // Set by Main before the room enters the scene tree.
-    // Defaults to the original spawn marker.
     public string ArrivalSpawnId { get; set; } = "PlayerSpawn";
+
+    // Used when returning to a room through its previous-level exit.
+    // In that case, the player appears at this room's next-level exit.
+    public bool ArriveAtNextLevelExit { get; set; } = false;
 
     public override void _Ready()
     {
@@ -39,22 +42,47 @@ public partial class RoomRoot : Node2D
         // Restore saved object states before gameplay continues.
         RestorePersistentState();
 
-        // Use the requested arrival marker when available.
-        Marker2D playerSpawn = GetNodeOrNull<Marker2D>(
-            $"SpawnPoints/{ArrivalSpawnId}"
-        ) ?? GetNodeOrNull<Marker2D>(
-            "SpawnPoints/PlayerSpawn"
-        );
-
-        if (playerSpawn != null)
+        // A previous-level exit returns the player to the exit used to leave this room.
+        bool playerPlaced = false;
+        if (ArriveAtNextLevelExit)
         {
-            _player.GlobalPosition = playerSpawn.GlobalPosition;
+            RoomExit? nextExit = FindNextLevelExit(this);
+            if (nextExit != null)
+            {
+                _player.GlobalPosition = nextExit.GlobalPosition;
+                playerPlaced = true;
+            }
+            else
+            {
+                GD.PushWarning(
+                    "RoomRoot: No NextLevel exit found in room '" + RoomId +
+                    "'. Falling back to PlayerSpawn."
+                );
+            }
         }
-        else
+
+        if (!playerPlaced)
         {
-            GD.PushWarning(
-                $"Room '{RoomId}' has no valid player spawn marker."
+            string spawnId = string.IsNullOrWhiteSpace(ArrivalSpawnId)
+                ? "PlayerSpawn"
+                : ArrivalSpawnId;
+
+            Marker2D? playerSpawn = GetNodeOrNull<Marker2D>(
+                "SpawnPoints/" + spawnId
+            ) ?? GetNodeOrNull<Marker2D>(
+                "SpawnPoints/PlayerSpawn"
             );
+
+            if (playerSpawn != null)
+            {
+                _player.GlobalPosition = playerSpawn.GlobalPosition;
+            }
+            else
+            {
+                GD.PushWarning(
+                    "Room '" + RoomId + "' has no valid player spawn marker."
+                );
+            }
         }
 
         // Calculate the room's outer bounds.
@@ -86,6 +114,24 @@ public partial class RoomRoot : Node2D
         }
     }
 
+
+    private RoomExit? FindNextLevelExit(Node parent)
+    {
+        if (parent is RoomExit exit &&
+            exit.ExitDirection == RoomExit.ExitDirectionType.NextLevel)
+        {
+            return exit;
+        }
+
+        foreach (Node child in parent.GetChildren())
+        {
+            RoomExit? found = FindNextLevelExit(child);
+            if (found != null)
+                return found;
+        }
+
+        return null;
+    }
 
     private Rect2? GetLayerWorldBounds(string layerName)
     {
