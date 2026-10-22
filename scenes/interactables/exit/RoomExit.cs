@@ -2,8 +2,8 @@ using Godot;
 
 public partial class RoomExit : Area2D
 {
-    [Export]
-    public PackedScene DestinationRoom { get; set; } = null!;
+    [Export(PropertyHint.File, "*.tscn")]
+    public string DestinationRoomPath { get; set; } = "";
 
     [Export]
     public string DestinationSpawnId { get; set; } = "PlayerSpawn";
@@ -33,8 +33,10 @@ public partial class RoomExit : Area2D
 
     private void OnBodyExited(Node2D body)
     {
-        if (body.IsInGroup("player"))
-            _playerInRange = false;
+        if (!body.IsInGroup("player"))
+            return;
+
+        _playerInRange = false;
     }
 
 
@@ -46,30 +48,56 @@ public partial class RoomExit : Area2D
         if (!@event.IsActionPressed("interact"))
             return;
 
-        if (DestinationRoom == null)
-        {
-            GD.PushWarning(
-                $"{Name}: Assign a DestinationRoom."
-            );
-
-            return;
-        }
+        GetViewport().SetInputAsHandled();
 
         _transitionPending = true;
 
-        GetViewport().SetInputAsHandled();
-
-        // Defer unloading this room until input processing finishes.
+        // Defer the transition until input processing finishes.
         CallDeferred(nameof(PerformTransition));
     }
 
 
     private void PerformTransition()
     {
-        Main main = GetNode<Main>("/root/Main");
+        if (string.IsNullOrWhiteSpace(DestinationRoomPath) ||
+            !ResourceLoader.Exists(DestinationRoomPath))
+        {
+            GD.PushWarning(
+                $"{Name}: Destination room path is empty or invalid: " +
+                $"'{DestinationRoomPath}'."
+            );
+
+            _transitionPending = false;
+            return;
+        }
+
+        PackedScene? destinationRoom =
+            ResourceLoader.Load<PackedScene>(DestinationRoomPath);
+
+        if (destinationRoom == null)
+        {
+            GD.PushWarning(
+                $"{Name}: Failed to load room: {DestinationRoomPath}"
+            );
+
+            _transitionPending = false;
+            return;
+        }
+
+        Main? main = GetNodeOrNull<Main>("/root/Main");
+
+        if (main == null)
+        {
+            GD.PushError(
+                "RoomExit: Could not find Main at /root/Main."
+            );
+
+            _transitionPending = false;
+            return;
+        }
 
         main.TransitionTo(
-            DestinationRoom,
+            destinationRoom,
             DestinationSpawnId
         );
     }
