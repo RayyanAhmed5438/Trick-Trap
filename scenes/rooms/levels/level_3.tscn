@@ -12,7 +12,7 @@
 
 [node name="RoomRoot" type="Node2D" unique_id=1985003105]
 script = ExtResource("1_lpbkb")
-RoomId = "level_2"
+RoomId = "level_3"
 
 [node name="Floor" type="TileMapLayer" parent="." unique_id=1636846667]
 modulate = Color(1.2678841, 2.2706914, 2.2706914, 1)
