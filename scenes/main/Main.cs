@@ -37,6 +37,10 @@ public partial class Main : Node
 
         if (window.Mode == Window.ModeEnum.Windowed)
         {
+            // Remove windowed-size constraints while fullscreen is active.
+            window.MinSize = Vector2I.Zero;
+            window.MaxSize = Vector2I.Zero;
+            window.Unresizable = false;
             window.Mode = Window.ModeEnum.Fullscreen;
             return;
         }
