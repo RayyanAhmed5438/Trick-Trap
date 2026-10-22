@@ -26,6 +26,7 @@ public partial class Drawer : StaticBody2D, IRoomStateful
 
         _interactionPrompt.Visible = false;
         InventoryCapacity = Mathf.Clamp(InventoryCapacity, 1, 10);
+        PositionPromptWithinViewport();
 
         if (Contents.Count > InventoryCapacity)
         {
@@ -40,12 +41,73 @@ public partial class Drawer : StaticBody2D, IRoomStateful
         _interactionArea.BodyExited += OnBodyExited;
     }
 
+    public override void _Process(double delta)
+    {
+        // Reposition the prompt as the camera moves, keeping it inside the viewport.
+        if (_playerInRange && _interactionPrompt.Visible)
+            PositionPromptWithinViewport();
+    }
+
+
+    private void PositionPromptWithinViewport()
+    {
+        Transform2D canvasTransform = GetViewport().GetCanvasTransform();
+        Vector2 viewportSize = GetViewportRect().Size;
+        Vector2 screenPosition = canvasTransform * GlobalPosition;
+
+        float screenScaleX = Mathf.Max(0.001f, canvasTransform.X.Length());
+        float screenScaleY = Mathf.Max(0.001f, canvasTransform.Y.Length());
+
+        // The prompt's horizontal offsets extend 62 world units from the drawer.
+        bool spaceRight = screenPosition.X + 62.0f * screenScaleX
+            <= viewportSize.X - 4.0f;
+        bool spaceLeft = screenPosition.X - 62.0f * screenScaleX >= 4.0f;
+
+        bool placeRight;
+        if (spaceRight && spaceLeft)
+            placeRight = screenPosition.X <= viewportSize.X * 0.5f;
+        else
+            placeRight = spaceRight || !spaceLeft;
+
+        if (placeRight)
+        {
+            _interactionPrompt.OffsetLeft = 14.0f;
+            _interactionPrompt.OffsetRight = 62.0f;
+        }
+        else
+        {
+            _interactionPrompt.OffsetLeft = -62.0f;
+            _interactionPrompt.OffsetRight = -14.0f;
+        }
+
+        // If the drawer is near the top/bottom edge, put the prompt inward
+        // rather than above/below the visible viewport.
+        float edgeDistanceY = 20.0f * screenScaleY;
+        if (screenPosition.Y < edgeDistanceY)
+        {
+            _interactionPrompt.OffsetTop = 4.0f;
+            _interactionPrompt.OffsetBottom = 18.0f;
+        }
+        else if (screenPosition.Y > viewportSize.Y - edgeDistanceY)
+        {
+            _interactionPrompt.OffsetTop = -18.0f;
+            _interactionPrompt.OffsetBottom = -4.0f;
+        }
+        else
+        {
+            _interactionPrompt.OffsetTop = -7.0f;
+            _interactionPrompt.OffsetBottom = 7.0f;
+        }
+    }
+
+
     private void OnBodyEntered(Node2D body)
     {
         if (!body.IsInGroup("player"))
             return;
 
         _playerInRange = true;
+        PositionPromptWithinViewport();
         _interactionPrompt.Visible = true;
     }
 
