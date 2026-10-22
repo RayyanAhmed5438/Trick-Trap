@@ -58,7 +58,8 @@ PersistentId = "Drawer2"
 
 [node name="RoomExit" parent="WorldYSort" unique_id=748553445 instance=ExtResource("7_u5457")]
 position = Vector2(190, 116)
-DestinationSpawnId = "Arrival_from_level_2"
+DestinationRoomPath = "res://scenes/rooms/levels/level_1.tscn"
+ExitDirection = 1
 
 [node name="FurniturePlaceholder" parent="WorldYSort" unique_id=497856792 instance=ExtResource("4_7uu6a")]
 position = Vector2(186, 69)
