@@ -47,12 +47,15 @@ ContentsMessage = "You Found a key!"
 
 [node name="Candy" parent="WorldYSort/Candies" unique_id=1096478002 instance=ExtResource("6_j4i02")]
 position = Vector2(425, 49)
+PersistentId = "level_1_candy_01"
 
 [node name="Candy2" parent="WorldYSort/Candies" unique_id=2009523819 instance=ExtResource("6_j4i02")]
 position = Vector2(-86, 63)
+PersistentId = "level_1_candy_02"
 
 [node name="Candy3" parent="WorldYSort/Candies" unique_id=1835078158 instance=ExtResource("6_j4i02")]
 position = Vector2(151, 64)
+PersistentId = "level_1_candy_03"
 
 [node name="RoomExit" parent="WorldYSort" unique_id=748553445 instance=ExtResource("7_va068")]
 position = Vector2(462, -22)
@@ -64,17 +67,17 @@ ExitDirection = 0
 [node name="ItemPickup" parent="WorldYSort/Node2D" unique_id=1739393689 instance=ExtResource("7_57wra")]
 position = Vector2(-121, -72)
 ItemData = ExtResource("8_f0iwe")
-PersistentId = "rusty_key_01"
+PersistentId = "level_1_rusty_key_01"
 
 [node name="ItemPickup3" parent="WorldYSort/Node2D" unique_id=944017826 instance=ExtResource("7_57wra")]
 position = Vector2(312, -87)
 ItemData = ExtResource("8_f0iwe")
-PersistentId = "rusty_key_01"
+PersistentId = "level_1_rusty_key_03"
 
 [node name="ItemPickup2" parent="WorldYSort/Node2D" unique_id=1774724531 instance=ExtResource("7_57wra")]
 position = Vector2(42, -88)
 ItemData = ExtResource("8_f0iwe")
-PersistentId = "rusty_key_01"
+PersistentId = "level_1_rusty_key_02"
 
 [node name="Foreground" type="TileMapLayer" parent="." unique_id=1573729650]
 tile_set = ExtResource("2_snaow")
